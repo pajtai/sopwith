@@ -1,6 +1,6 @@
 {
   "name": "sdl-sopwith-web",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "description": "Vanilla-JS port of SDL Sopwith.",
@@ -8,7 +8,8 @@
     "copy-data": "node scripts/copy-data.js",
     "dev": "node scripts/copy-data.js && esbuild src/main.js --bundle --outfile=public/bundle.js --servedir=public --serve=0.0.0.0:5173",
     "watch": "node scripts/copy-data.js && esbuild src/main.js --bundle --outfile=public/bundle.js --servedir=public --serve=0.0.0.0:5173 --watch=forever",
-    "build": "node scripts/copy-data.js && node scripts/build.js"
+    "build": "node scripts/copy-data.js && node scripts/build.js",
+    "deploy": "node scripts/deploy.js"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"

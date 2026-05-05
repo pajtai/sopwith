@@ -43,6 +43,7 @@ pnpm install
 | `pnpm dev`      | Copies `maps/*.sop` → `public/data/`, then runs esbuild's dev server on `http://0.0.0.0:5173/`.               |
 | `pnpm watch`    | Same as `dev`, plus `esbuild --watch`: rebuilds on file change and live-reloads the browser via `/esbuild` SSE. |
 | `pnpm build`    | Produces a hashed, minified production bundle and copies static assets into `dist/`.                          |
+| `pnpm deploy`   | Builds, then commits the `dist/` contents to the `gh-pages` branch root and pushes to `origin`.               |
 | `pnpm copy-data`| Just the data-copy step (mostly a build dependency).                                                          |
 
 ## Live reload
@@ -59,3 +60,14 @@ pnpm install
 4. Rewrites `dist/index.html` to point at the hashed bundle filename.
 
 The contents of `dist/` are static and can be served by any web server.
+
+## Deploy to GitHub Pages
+
+`pnpm deploy`:
+
+1. Refuses to run from `gh-pages` or with a dirty working tree.
+2. Runs `pnpm build` and stages `dist/` in a temp dir outside the repo.
+3. `git checkout gh-pages`, fast-forwards from `origin/gh-pages`.
+4. `git rm -rf .` to wipe stale tracked files (untracked `dist/`, `node_modules/`, `.idea/` are preserved).
+5. Copies the staged build to the repo root, commits as `deploy from <branch>@<sha>`, and pushes to `origin/gh-pages`.
+6. `git checkout` back to the original branch in a `finally` block — a mid-run failure won't strand you on `gh-pages`.
