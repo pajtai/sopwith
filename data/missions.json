@@ -1,0 +1,13 @@
+{
+  "missions": [
+    "bogey.sop",
+    "doghouse.sop",
+    "empty.sop",
+    "new_targets.sop",
+    "original.sop",
+    "sopwith1.sop",
+    "tank_strike.sop",
+    "title.sop",
+    "triplane.sop"
+  ]
+}
