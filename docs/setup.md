@@ -68,6 +68,6 @@ The contents of `dist/` are static and can be served by any web server.
 1. Refuses to run from `gh-pages` or with a dirty working tree.
 2. Runs `pnpm build` and stages `dist/` in a temp dir outside the repo.
 3. `git checkout gh-pages`, fast-forwards from `origin/gh-pages`.
-4. `git rm -rf .` to wipe stale tracked files (untracked `dist/`, `node_modules/`, `.idea/` are preserved).
+4. `git rm -rf .` to wipe stale tracked files, then rewrites `.gitignore` on the branch so `dist/`, `node_modules/`, `.idea/`, and `public/` stay untracked across deploys.
 5. Copies the staged build to the repo root, commits as `deploy from <branch>@<sha>`, and pushes to `origin/gh-pages`.
 6. `git checkout` back to the original branch in a `finally` block — a mid-run failure won't strand you on `gh-pages`.

@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { cpSync, existsSync, readdirSync, rmSync } from "node:fs";
+import { cpSync, existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -54,12 +54,18 @@ try {
 	}
 
 	// Wipe tracked files so removed assets don't linger. Untracked dirs
-	// (dist/, node_modules/, .idea/) are preserved by git rm.
+	// (dist/, node_modules/, .idea/, public/) are preserved by git rm
+	// because .gitignore keeps them untracked on this branch.
 	try {
 		run("git rm -rf .");
 	} catch {
 		// empty branch, nothing tracked — fine
 	}
+
+	// Rewrite .gitignore so the source-branch dirs stay untracked even if a
+	// prior deploy clobbered it. This is what keeps `git add -A` below from
+	// committing dist/, node_modules/, etc.
+	writeFileSync(join(root, ".gitignore"), ".idea/\ndist/\nnode_modules/\npublic/\n");
 
 	for (const name of readdirSync(stage)) {
 		cpSync(join(stage, name), join(root, name), { recursive: true });
